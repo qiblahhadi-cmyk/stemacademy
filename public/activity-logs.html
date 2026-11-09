@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Activity Logs | STEM Academy</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/modules.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">S</span><span><strong>STEM Academy</strong><small>AJK Board Physics</small></span></a>
+      <nav class="nav-list" aria-label="Main navigation">
+        <a href="/#dashboard" data-page="dashboard">Dashboard</a>
+        <a href="/classes.html" data-page="classes">Classes &amp; People</a>
+        <a href="/subjects.html" data-page="subjects">Subjects &amp; Topics</a>
+        <a href="/assignments.html" data-page="assignments">Assignments</a>
+        <a href="/assessments.html" data-page="assessments">Assessments &amp; Results</a>
+        <a href="/course-hub.html" data-page="course-hub">Course Hub</a>
+        <a href="/attendance.html" data-page="attendance">Attendance</a>
+        <a href="/communication.html" data-page="communication">Communication</a>
+        <a class="active" href="/activity-logs.html" data-page="activity">Activity Logs</a>
+        <a href="/#profile" data-page="profile">My Account &amp; Profile</a>
+        <a href="/#settings" data-page="settings">Admin &amp; Settings</a>
+      </nav>
+      <div class="sidebar-foot">Development preview · Demo records only</div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button><span id="currentSection">Activity Logs</span><span class="preview-tag">PREVIEW</span></header>
+      <section class="module-page activity-page">
+        <div class="welcome-row">
+          <div><p class="eyebrow">ACADEMY OVERSIGHT</p><h1>Activity Logs</h1><p class="muted">A chronological view of important actions across the academy.</p></div>
+          <span class="module-count" id="activityCount">0 activities</span>
+        </div>
+        <div class="notice" role="note"><span class="notice-icon">i</span><p><strong>Demo only:</strong> These fictional examples are stored in this browser page's memory. No real user activity is being recorded, and this is not an audit log.</p></div>
+        <div class="module-toolbar">
+          <label class="search-field"> <span class="sr-only">Search activity</span><input id="activitySearch" type="search" placeholder="Search activities..." autocomplete="off"></label>
+          <label class="filter-field"><span class="sr-only">Filter by category</span><select id="categoryFilter"><option value="all">All categories</option><option value="Classes">Classes</option><option value="Assignments">Assignments</option><option value="Assessments">Assessments</option><option value="Attendance">Attendance</option><option value="Communication">Communication</option><option value="Account">Account</option></select></label>
+          <label class="filter-field"><span class="sr-only">Filter by actor</span><select id="actorFilter"><option value="all">All people</option><option value="Academy Admin">Academy Admin</option><option value="Physics Teacher">Physics Teacher</option></select></label>
+        </div>
+        <div class="activity-summary" id="activitySummary" aria-live="polite"></div>
+        <section class="panel activity-panel">
+          <div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Newest examples appear first.</p></div><button class="button button-secondary" id="resetActivity" type="button">Reset demo data</button></div>
+          <div id="activityList" class="activity-list" aria-live="polite"></div>
+          <p id="emptyActivity" class="empty-state" hidden>No activities match your filters.</p>
+        </section>
+        <footer>STEM Academy <span>•</span> AJK Board Physics <span>•</span> Development preview</footer>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="/assets/js/activity-logs.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="Sign in to STEM Academy">
+  <title>Sign in | STEM Academy</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/auth.css">
+  <script type="module" src="/assets/js/login.js"></script>
+</head>
+<body class="auth-body">
+  <main class="auth-layout">
+    <section class="auth-brand-panel">
+      <a class="brand auth-brand" href="/"><span class="brand-mark">S</span><span><strong>STEM Academy</strong><small>Learning Portal</small></span></a>
+      <div class="auth-message">
+        <span class="auth-kicker">AJK BOARD PHYSICS</span>
+        <h1>Learning, organised<br>for every classroom.</h1>
+        <p>A focused learning workspace for students, teachers and academy administration.</p>
+      </div>
+      <div class="auth-brand-footer">A simple, classroom-first learning experience.</div>
+    </section>
+    <section class="auth-form-panel">
+      <div class="auth-form-wrap">
+        <a class="mobile-brand" href="/"><span class="brand-mark">S</span><strong>STEM Academy</strong></a>
+        <span class="auth-kicker">WELCOME BACK</span>
+        <h2>Sign in to your account</h2>
+        <p class="muted auth-subtitle">Use the account provided by your academy administrator.</p>
+        <div class="prototype-alert"><strong>Preview only</strong><span>Secure sign-in is not connected yet. Do not enter a real password on this preview page.</span></div>
+        <form id="loginForm">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="username" placeholder="you@example.com" required>
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+          <button class="auth-submit" type="submit">Sign in <span>→</span></button>
+          <p id="loginMessage" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+        <div class="auth-help"><span>Need access?</span> Contact your academy administrator.</div>
+        <a class="back-link" href="/">← Back to preview dashboard</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

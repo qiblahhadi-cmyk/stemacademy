@@ -1,0 +1,10 @@
+{
+  "name": "STEM Academy",
+  "short_name": "STEM Academy",
+  "description": "Classroom learning management system for AJK Board Physics",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#2563eb",
+  "icons": []
+}

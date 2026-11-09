@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="Classes and people workspace for STEM Academy">
+  <title>Classes &amp; People | STEM Academy</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/modules.css">
+  <script type="module" src="/assets/js/classes.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">S</span><span><strong>STEM Academy</strong><small>Learning Portal</small></span></a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <a class="nav-link" href="/"><span>▦</span> Dashboard</a>
+        <a class="nav-link active" href="/classes.html" aria-current="page"><span>▤</span> Classes &amp; People</a>
+        <a class="nav-link" href="/#subjects"><span>◫</span> Subjects &amp; Topics</a>
+        <a class="nav-link" href="/#assignments"><span>☷</span> Assignments</a>
+        <a class="nav-link" href="/#assessments"><span>✓</span> Assessments &amp; Results</a>
+        <a class="nav-link" href="/#course-hub"><span>▣</span> Course Hub</a>
+        <a class="nav-link" href="/#attendance"><span>◷</span> Attendance</a>
+        <a class="nav-link" href="/#communication"><span>☏</span> Communication</a>
+        <a class="nav-link" href="/#activity"><span>≡</span> Activity Logs</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a class="nav-link" href="/#profile"><span>◎</span> My Profile</a>
+        <a class="nav-link" href="/#settings"><span>⚙</span> Admin &amp; Settings</a>
+        <div class="sidebar-note"><strong>AJK Board Physics</strong><span>Classroom learning workspace</span></div>
+      </div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <button class="menu-button" id="menuButton" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong>Classes &amp; People</strong></div>
+        <div class="topbar-right"><span class="status-dot"></span><span class="role-label">Demo preview</span><div class="avatar">SA</div></div>
+      </header>
+      <section class="page-content">
+        <div class="welcome-row">
+          <div><p class="eyebrow">ACADEMY MANAGEMENT</p><h1>Classes &amp; People</h1><p class="muted">Organise grade groups, classroom sections and the people in your academy.</p></div>
+          <span class="preview-tag">INTERFACE PREVIEW</span>
+        </div>
+        <div class="notice"><span class="notice-icon">i</span><p><strong>Demo workspace only:</strong> All names and figures below are sample data. Changes made here stay temporarily in this browser page and are not saved to a database. Do not enter real student information.</p></div>
+        <div class="module-stats">
+          <article class="stat-card"><div class="stat-top"><span>Grade groups</span><span class="stat-icon blue">▤</span></div><strong id="gradeCount">2</strong><small>Illustrative grade groups</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Classes</span><span class="stat-icon purple">▦</span></div><strong id="classCount">2</strong><small>Illustrative classroom sections</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Students</span><span class="stat-icon green">♙</span></div><strong id="studentCount">6</strong><small>Sample student profiles</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Teachers</span><span class="stat-icon amber">♧</span></div><strong id="teacherCount">1</strong><small>Sample teacher profile</small></article>
+        </div>
+        <section class="panel people-panel" aria-label="People and class records">
+          <div class="people-toolbar">
+            <div><h2>People &amp; class records</h2><p class="muted">Switch between classes, students and teachers.</p></div>
+            <button class="primary-button" id="addButton" type="button">＋ <span id="addButtonText">Add class</span></button>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Record type">
+            <button class="tab active" type="button" role="tab" aria-selected="true" data-tab="classes">Classes</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-tab="students">Students</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-tab="teachers">Teachers</button>
+          </div>
+          <div class="filters">
+            <label class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search records…" aria-label="Search records"></label>
+            <label class="filter-label" for="gradeFilter">Grade</label>
+            <select id="gradeFilter" aria-label="Filter by grade"><option value="all">All grades</option><option value="9">Grade 9</option><option value="10">Grade 10</option></select>
+          </div>
+          <div class="table-wrap">
+            <table class="records-table">
+              <thead id="tableHead"><tr><th>Class</th><th>Grade</th><th>Students</th><th>Teacher</th><th>Status</th></tr></thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+          <p class="result-count" id="resultCount" aria-live="polite"></p>
+        </section>
+        <section class="panel assignment-panel">
+          <div><h2>Teaching assignments</h2><p class="muted">A teacher-to-class overview for the sample academy setup.</p></div>
+          <div class="assignment-row"><div class="person-avatar">ST</div><div class="assignment-person"><strong>Sample Teacher</strong><small>Physics · Teacher demo profile</small></div><div class="assignment-classes"><span>Grade 9 · Section A</span><span>Grade 10 · Section A</span></div></div>
+        </section>
+        <footer>STEM Academy <span>•</span> AJK Board Physics <span>•</span> Demo data only</footer>
+      </section>
+    </main>
+  </div>
+  <dialog id="recordDialog" class="record-dialog">
+    <form id="recordForm" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">TEMPORARY DEMO ENTRY</p><h2 id="dialogTitle">Add class</h2></div><button class="icon-button" type="button" id="closeDialog" aria-label="Close">×</button></div>
+      <p class="muted dialog-note">This entry will exist only until you leave or refresh this page.</p>
+      <label class="field-label" for="recordName" id="nameLabel">Class name</label>
+      <input class="form-input" id="recordName" name="recordName" maxlength="60" required placeholder="e.g. Section B">
+      <label class="field-label" for="recordGrade" id="gradeLabel">Grade</label>
+      <select class="form-input" id="recordGrade" name="recordGrade"><option value="9">Grade 9</option><option value="10">Grade 10</option></select>
+      <div class="dialog-actions"><button class="secondary-button" type="button" id="cancelDialog">Cancel</button><button class="primary-button" type="submit">Add to demo</button></div>
+      <p class="form-feedback" id="formFeedback" role="status"></p>
+    </form>
+  </dialog>
+</body>
+</html>

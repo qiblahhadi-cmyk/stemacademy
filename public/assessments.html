@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#2563eb">
+<meta name="description" content="STEM Academy assessments and results workspace"><title>Assessments &amp; Results | STEM Academy</title>
+<link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="/assets/css/modules.css"><script type="module" src="/assets/js/assessments.js"></script>
+</head>
+<body><div class="app-shell">
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="/"><span class="brand-mark">S</span><span><strong>STEM Academy</strong><small>Learning Portal</small></span></a><div class="nav-label">WORKSPACE</div>
+<nav class="navigation" aria-label="Main navigation">
+<a class="nav-link" href="/"><span>▦</span> Dashboard</a><a class="nav-link" href="/classes.html"><span>▤</span> Classes &amp; People</a><a class="nav-link" href="/subjects.html"><span>◫</span> Subjects &amp; Topics</a><a class="nav-link" href="/assignments.html"><span>☷</span> Assignments</a><a class="nav-link active" href="/assessments.html" aria-current="page"><span>✓</span> Assessments &amp; Results</a><a class="nav-link" href="/#course-hub"><span>▣</span> Course Hub</a><a class="nav-link" href="/#attendance"><span>◷</span> Attendance</a><a class="nav-link" href="/#communication"><span>☏</span> Communication</a><a class="nav-link" href="/#activity"><span>≡</span> Activity Logs</a>
+</nav><div class="sidebar-bottom"><a class="nav-link" href="/#profile"><span>◎</span> My Profile</a><a class="nav-link" href="/#settings"><span>⚙</span> Admin &amp; Settings</a><div class="sidebar-note"><strong>AJK Board Physics</strong><span>Classroom learning workspace</span></div></div>
+</aside>
+<main class="main-area"><header class="topbar"><button class="menu-button" id="menuButton" aria-label="Toggle navigation">☰</button><div class="breadcrumb">Workspace <span>/</span> <strong>Assessments &amp; Results</strong></div><div class="topbar-right"><span class="status-dot"></span><span class="role-label">Demo preview</span><div class="avatar">SA</div></div></header>
+<section class="page-content">
+<div class="welcome-row"><div><p class="eyebrow">LEARNING MEASUREMENT</p><h1>Assessments &amp; Results</h1><p class="muted">Plan classroom tests and review illustrative learner results.</p></div><span class="preview-tag">INTERFACE PREVIEW</span></div>
+<div class="notice"><span class="notice-icon">i</span><p><strong>Demo workspace only:</strong> All assessments and marks shown are fictional sample data. New assessments remain in this browser page temporarily. No real marks are stored, published or visible to students.</p></div>
+<div class="module-stats">
+<article class="stat-card"><div class="stat-top"><span>Assessments</span><span class="stat-icon blue">✓</span></div><strong id="assessmentCount">3</strong><small>Sample and temporary entries</small></article>
+<article class="stat-card"><div class="stat-top"><span>Result records</span><span class="stat-icon green">▤</span></div><strong id="recordCount">6</strong><small>Illustrative student records</small></article>
+<article class="stat-card"><div class="stat-top"><span>Class average</span><span class="stat-icon purple">％</span></div><strong id="averageScore">—</strong><small>Across visible sample results</small></article>
+<article class="stat-card"><div class="stat-top"><span>At / above 50%</span><span class="stat-icon amber">↗</span></div><strong id="passCount">—</strong><small>Demo indicator only, not policy</small></article>
+</div>
+<section class="panel assessment-workspace">
+<div class="people-toolbar"><div><h2>Assessment register</h2><p class="muted">Switch between planned assessments and example result records.</p></div><button class="primary-button" id="createAssessment" type="button">＋ New assessment</button></div>
+<div class="tabs" role="tablist" aria-label="Assessment views"><button class="tab active" id="assessmentsTab" type="button" role="tab" aria-selected="true">Assessments</button><button class="tab" id="resultsTab" type="button" role="tab" aria-selected="false">Results</button></div>
+<div class="filters assessment-filters"><label class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search assessments…" aria-label="Search records"></label><label class="filter-label" for="gradeFilter">Grade</label><select id="gradeFilter"><option value="all">All grades</option><option value="9">Grade 9</option><option value="10">Grade 10</option></select><label class="filter-label" for="typeFilter">Type</label><select id="typeFilter"><option value="all">All types</option><option value="Quiz">Quiz</option><option value="Class test">Class test</option><option value="Monthly test">Monthly test</option></select></div>
+<div id="assessmentView"><div class="table-wrap"><table class="records-table assessment-table"><thead><tr><th>Assessment</th><th>Class</th><th>Type</th><th>Date</th><th>Total marks</th><th>Action</th></tr></thead><tbody id="assessmentBody"></tbody></table></div></div>
+<div id="resultsView" hidden><div class="table-wrap"><table class="records-table assessment-table"><thead><tr><th>Student</th><th>Assessment</th><th>Class</th><th>Marks</th><th>Percentage</th><th>Indicator</th></tr></thead><tbody id="resultsBody"></tbody></table></div></div>
+<p class="result-count" id="resultCount" aria-live="polite"></p>
+</section>
+<section class="panel assessment-guidance"><h2>Assessment workflow</h2><div class="assessment-steps"><div><span>1</span><strong>Plan</strong><small>Choose class, assessment type, date and total marks.</small></div><div><span>2</span><strong>Record</strong><small>Enter marks after the classroom assessment is completed.</small></div><div><span>3</span><strong>Review</strong><small>Check class performance before any approved result release.</small></div></div><p class="muted">Retakes, pass thresholds, result visibility and automatic course completion remain policy decisions—not active rules in this preview.</p></section>
+<footer>STEM Academy <span>•</span> AJK Board Physics <span>•</span> Demo data only</footer>
+</section></main></div>
+<dialog id="assessmentDialog" class="record-dialog assessment-dialog"><form id="assessmentForm">
+<div class="dialog-heading"><div><p class="eyebrow">TEMPORARY DEMO ENTRY</p><h2>New assessment</h2></div><button class="icon-button" type="button" id="closeAssessmentDialog" aria-label="Close">×</button></div>
+<p class="muted dialog-note">This entry is temporary and will disappear when this page is refreshed.</p>
+<label class="field-label" for="assessmentTitleInput">Assessment title</label><input class="form-input" id="assessmentTitleInput" maxlength="90" required placeholder="e.g. Chapter 2 class test">
+<label class="field-label" for="assessmentGradeInput">Class</label><select class="form-input" id="assessmentGradeInput"><option value="9">Grade 9 · Section A</option><option value="10">Grade 10 · Section A</option></select>
+<label class="field-label" for="assessmentTypeInput">Assessment type</label><select class="form-input" id="assessmentTypeInput"><option>Quiz</option><option>Class test</option><option>Monthly test</option></select>
+<label class="field-label" for="assessmentDateInput">Assessment date</label><input class="form-input" id="assessmentDateInput" type="date" required>
+<label class="field-label" for="assessmentMarksInput">Total marks</label><input class="form-input" id="assessmentMarksInput" type="number" min="1" max="1000" step="1" required value="20">
+<div class="dialog-actions"><button class="secondary-button" type="button" id="cancelAssessmentDialog">Cancel</button><button class="primary-button" type="submit">Add demo assessment</button></div><p class="form-feedback" id="assessmentFeedback" role="status"></p>
+</form></dialog>
+<dialog id="assessmentDetailDialog" class="record-dialog"><div class="dialog-heading"><div><p class="eyebrow">ASSESSMENT DETAILS</p><h2 id="assessmentDetailTitle">Assessment</h2></div><button class="icon-button" type="button" id="closeAssessmentDetail" aria-label="Close">×</button></div><div id="assessmentDetailContent" class="detail-content"></div><div class="dialog-actions"><button class="secondary-button" type="button" id="doneAssessmentDetail">Close</button></div></dialog>
+</body></html>
