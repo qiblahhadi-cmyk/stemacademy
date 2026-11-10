@@ -1,7 +1,12 @@
 
 [build]
+  command = "npm run build:client"
   publish = "public"
   functions = "netlify/functions"
+
+  [build.environment]
+    # Matches package.json engines (>=22.13.0); the build uses node --env-file-if-exists.
+    NODE_VERSION = "22"
 
 [functions]
   node_bundler = "esbuild"
@@ -11,3 +16,11 @@
   to = "/.netlify/functions/api/:splat"
   status = 200
   force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

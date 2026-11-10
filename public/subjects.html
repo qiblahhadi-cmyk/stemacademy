@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#2563eb">
-<meta name="description" content="AJK Board Physics curriculum workspace"><title>Subjects &amp; Topics | STEM Academy</title>
-<link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="/assets/css/modules.css"><script type="module" src="/assets/js/subjects.js"></script>
+<meta name="description" content="Verified STEM Academy curriculum records"><title>Subjects &amp; Topics | STEM Academy</title>
+<link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="/assets/css/modules.css">
 </head>
 <body>
 <div class="app-shell">
@@ -12,26 +12,24 @@
 <div class="nav-label">WORKSPACE</div>
 <nav class="navigation" aria-label="Main navigation">
 <a class="nav-link" href="/"><span>▦</span> Dashboard</a><a class="nav-link" href="/classes.html"><span>▤</span> Classes &amp; People</a><a class="nav-link active" href="/subjects.html" aria-current="page"><span>◫</span> Subjects &amp; Topics</a>
-<a class="nav-link" href="/#assignments"><span>☷</span> Assignments</a><a class="nav-link" href="/#assessments"><span>✓</span> Assessments &amp; Results</a><a class="nav-link" href="/#course-hub"><span>▣</span> Course Hub</a><a class="nav-link" href="/#attendance"><span>◷</span> Attendance</a><a class="nav-link" href="/#communication"><span>☏</span> Communication</a><a class="nav-link" href="/#activity"><span>≡</span> Activity Logs</a>
-</nav><div class="sidebar-bottom"><a class="nav-link" href="/#profile"><span>◎</span> My Profile</a><a class="nav-link" href="/#settings"><span>⚙</span> Admin &amp; Settings</a><div class="sidebar-note"><strong>AJK Board Physics</strong><span>Classroom learning workspace</span></div></div>
+<a class="nav-link" href="/assignments.html"><span>☷</span> Assignments</a><a class="nav-link" href="/assessments.html"><span>✓</span> Assessments &amp; Results</a><a class="nav-link" href="/attendance.html"><span>◷</span> Attendance</a><a class="nav-link" href="/communication.html"><span>☏</span>Notices</a><a class="nav-link" href="/chitchat.html"><span>☏</span> ChitChat</a><a class="nav-link" href="/activity-logs.html"><span>≡</span> Activity Logs</a>
+</nav><div class="sidebar-bottom"><a class="nav-link" href="/profile.html"><span>◎</span> My Profile</a><a class="nav-link" href="/settings.html"><span>⚙</span> Admin &amp; Settings</a><button class="nav-link" type="button" data-sign-out><span>⎋</span> Sign out</button><div class="sidebar-note"><strong>STEM Academy</strong><span>Verified curriculum workspace</span></div></div>
 </aside>
 <main class="main-area">
-<header class="topbar"><button class="menu-button" id="menuButton" aria-label="Toggle navigation">☰</button><div class="breadcrumb">Workspace <span>/</span> <strong>Subjects &amp; Topics</strong></div><div class="topbar-right"><span class="status-dot"></span><span class="role-label">Demo preview</span><div class="avatar">SA</div></div></header>
+<header class="topbar"><button class="menu-button" id="menuButton" aria-label="Toggle navigation">☰</button><div class="breadcrumb">Workspace <span>/</span> <strong>Subjects &amp; Topics</strong></div><div class="topbar-right"><span class="status-dot"></span><span class="role-label">Signing in…</span><div class="avatar">SA</div></div></header>
 <section class="page-content">
-<div class="welcome-row"><div><p class="eyebrow">AJK BOARD PHYSICS</p><h1>Subjects &amp; Topics</h1><p class="muted">Organise the curriculum into grades, chapters, topics and learning objectives.</p></div><span class="preview-tag">CURRICULUM PREVIEW</span></div>
-<div class="notice"><span class="notice-icon">i</span><p><strong>Curriculum verification required:</strong> The chapter and topic names below are illustrative planning entries, not an authenticated AJK Board syllabus. Confirm the current textbook edition and official chapter sequence before teaching or publishing.</p></div>
-<div class="curriculum-layout">
-<section class="panel curriculum-main">
-<div class="curriculum-toolbar"><div><h2>Physics curriculum</h2><p class="muted">Choose a grade to review its chapter structure.</p></div><label class="grade-picker"><span>Grade</span><select id="gradeSelect" aria-label="Select grade"><option value="9">Grade 9</option><option value="10">Grade 10</option></select></label></div>
-<div class="curriculum-summary"><div><span class="summary-label">Chapters in this outline</span><strong id="chapterCount">3</strong></div><div><span class="summary-label">Topics listed</span><strong id="topicCount">9</strong></div><div><span class="summary-label">Objectives drafted</span><strong id="objectiveCount">3</strong></div></div>
-<div class="chapter-list" id="chapterList" aria-label="Chapters"></div>
+<div class="welcome-row"><div><p class="eyebrow">ACADEMIC CONTENT</p><h1>Subjects, Chapters &amp; Topics</h1><p class="muted">Browse curriculum records approved for your class and subject.</p></div></div>
+<div class="notice"><span class="notice-icon">i</span><p><strong>Official syllabus required:</strong> No AJK Board curriculum content is preloaded. Draft records remain unpublished until an administrator records and verifies the source title, publisher and edition. Do not treat illustrative or remembered chapter lists as official content.</p></div>
+<p class="form-feedback" id="pageFeedback" role="status" aria-live="polite"></p>
+<section class="panel course-workspace">
+<div class="filters course-filters"><label class="filter-label" for="classSelect">Class</label><select id="classSelect"><option value="">Loading…</option></select><label class="filter-label" for="subjectSelect">Subject</label><select id="subjectSelect" disabled><option value="">Choose a class first</option></select></div>
+<div class="curriculum-summary"><div><span class="summary-label">Chapters</span><strong id="chapterCount">0</strong></div><div><span class="summary-label">Topics</span><strong id="topicCount">0</strong></div><div><span class="summary-label">Learning objectives</span><strong id="objectiveCount">0</strong></div></div>
+<div class="curriculum-layout"><section class="curriculum-main"><div class="curriculum-toolbar"><div><h2>Chapter structure</h2><p class="muted" id="curriculumStatus">Choose a class and subject.</p></div><button class="primary-button" id="addChapter" type="button" hidden>Add chapter</button></div><div class="chapter-list" id="chapterList"></div></section>
+<aside class="curriculum-side"><h2>Topic details</h2><p class="muted" id="topicHeading">Select a chapter to view its topics.</p><ul class="objective-list" id="topicList"><li>No topic selected.</li></ul><div id="adminTopicTools" hidden><button class="secondary-button" id="addTopic" type="button">Add topic</button></div></aside></div>
 </section>
-<aside class="panel curriculum-side">
-<h2>Learning objectives</h2><p class="muted" id="objectiveChapter">Select a chapter to see its objectives.</p>
-<ul class="objective-list" id="objectiveList"><li>Objectives will appear here.</li></ul>
-<div class="side-divider"></div><h3>Curriculum workflow</h3>
-<ol class="workflow-list"><li><span>1</span><div><strong>Verify textbook</strong><small>Confirm AJK Board edition and chapter names.</small></div></li><li><span>2</span><div><strong>Organise topics</strong><small>Break each chapter into teachable lessons.</small></div></li><li><span>3</span><div><strong>Write objectives</strong><small>Define what learners should know or do.</small></div></li><li><span>4</span><div><strong>Publish to classes</strong><small>Make approved content available to students.</small></div></li></ol>
-</aside>
-</div>
-<footer>STEM Academy <span>•</span> AJK Board Physics <span>•</span> Curriculum outline preview</footer>
-</section></main></div></body></html>
+<footer>STEM Academy <span>•</span> Curriculum records are source-attributed and versioned</footer>
+</section></main></div>
+<dialog id="chapterDialog" class="record-dialog"><form id="chapterForm"><div class="dialog-heading"><div><p class="eyebrow">CURRICULUM DRAFT</p><h2>Add chapter</h2></div><button class="icon-button" type="button" data-close="chapterDialog" aria-label="Close">×</button></div><label class="field-label" for="chapterTitle">Chapter title</label><input class="form-input" id="chapterTitle" maxlength="180" required><label class="field-label" for="chapterSequence">Sequence number</label><input class="form-input" id="chapterSequence" type="number" min="0" max="10000" value="1" required><label class="field-label" for="chapterDescription">Description (optional)</label><textarea class="form-input" id="chapterDescription" maxlength="5000" rows="3"></textarea><p class="muted">This creates an unpublished, unverified draft. It will not appear to students.</p><div class="dialog-actions"><button class="secondary-button" type="button" data-close="chapterDialog">Cancel</button><button class="primary-button" type="submit">Save draft</button></div></form></dialog>
+<dialog id="topicDialog" class="record-dialog"><form id="topicForm"><div class="dialog-heading"><div><p class="eyebrow">CURRICULUM DRAFT</p><h2>Add topic</h2></div><button class="icon-button" type="button" data-close="topicDialog" aria-label="Close">×</button></div><label class="field-label" for="topicTitle">Topic title</label><input class="form-input" id="topicTitle" maxlength="180" required><label class="field-label" for="topicSequence">Sequence number</label><input class="form-input" id="topicSequence" type="number" min="0" max="10000" value="1" required><label class="field-label" for="topicObjectives">Learning objectives (one per line)</label><textarea class="form-input" id="topicObjectives" maxlength="15000" rows="5"></textarea><label class="field-label" for="topicDescription">Description (optional)</label><textarea class="form-input" id="topicDescription" maxlength="5000" rows="3"></textarea><p class="muted">This creates an unpublished, unverified draft.</p><div class="dialog-actions"><button class="secondary-button" type="button" data-close="topicDialog">Cancel</button><button class="primary-button" type="submit">Save draft</button></div></form></dialog>
+<script src="/assets/js/bundles/session.js" defer></script><script src="/assets/js/subjects.js" defer></script>
+</body></html>

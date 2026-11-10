@@ -1,63 +1,19 @@
 /**
- * STEM Academy - Login Alias Module
- * Manages quick login aliases and role preview shortcuts on the login portal.
+ * Convert an immutable academy ID into its internal Firebase email/password
+ * login alias. This is an identifier only, not a deliverable email address.
  */
+const LOGIN_ALIAS_DOMAIN = "stemacademy.edu.pk";
+const ACADEMY_ID_PATTERN = /^(?:SA-\d{4}-\d{3}|SA-(?:TCH|ADM)-\d{3})$/;
 
-export class LoginAliasManager {
-  constructor() {
-    this.initAliases();
+export function academyIdToAuthEmail(academyId) {
+  if (typeof academyId !== "string") {
+    throw new TypeError("A valid academy ID is required.");
   }
 
-  initAliases() {
-    const aliasButtons = document.querySelectorAll('.login-alias-btn');
-    if (!aliasButtons.length) return;
-
-    aliasButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        const role = button.getAttribute('data-role-alias');
-        if (role) {
-          this.applyAlias(role);
-        }
-      });
-    });
+  const normalized = academyId.trim().toUpperCase();
+  if (!ACADEMY_ID_PATTERN.test(normalized)) {
+    throw new TypeError("Academy ID format is invalid.");
   }
 
-  applyAlias(role) {
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-
-    if (!emailInput || !passwordInput) return;
-
-    switch (role) {
-      case 'admin':
-        emailInput.value = 'admin@stem.academy';
-        passwordInput.value = 'Password123!';
-        break;
-      case 'teacher':
-        emailInput.value = 'teacher@stem.academy';
-        passwordInput.value = 'Password123!';
-        break;
-      case 'student':
-        emailInput.value = 'student@stem.academy';
-        passwordInput.value = 'Password123!';
-        break;
-      case 'parent':
-        emailInput.value = 'parent@stem.academy';
-        passwordInput.value = 'Password123!';
-        break;
-      default:
-        emailInput.value = '';
-        passwordInput.value = '';
-        break;
-    }
-
-    // Trigger input events for form validation state binders if present
-    emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-    passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
-  }
+  return `${normalized.toLowerCase()}@${LOGIN_ALIAS_DOMAIN}`;
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  window.LoginAlias = new LoginAliasManager();
-});

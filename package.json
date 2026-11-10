@@ -5,13 +5,26 @@
   "type": "module",
   "description": "STEM Academy Learning Management System",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13.0"
   },
   "scripts": {
     "test": "node --test",
-    "check": "node --check netlify/functions/api.mjs && node --check netlify/functions/lib/firebase-admin.mjs && node --check netlify/functions/lib/auth-middleware.mjs && node --check netlify/functions/lib/authorization.mjs && node --check netlify/functions/lib/id-allocator.mjs && node --test tests/frontend/static-assets.test.mjs"
+    "check": "node --check netlify/functions/api.mjs && node --check netlify/functions/lib/firebase-admin.mjs && node --check netlify/functions/lib/firebase-config.mjs && node --check netlify/functions/lib/auth-middleware.mjs && node --check netlify/functions/lib/authorization.mjs && node --check netlify/functions/lib/id-allocator.mjs && node --check netlify/functions/lib/routes/assignments.mjs && node --check netlify/functions/lib/routes/roster.mjs && node --check netlify/functions/lib/routes/dashboard.mjs && node --check netlify/functions/lib/routes/profile.mjs && node --check netlify/functions/lib/routes/notices.mjs && node --check netlify/functions/lib/routes/chitchat.mjs && node --check netlify/functions/lib/routes/admin.mjs && node --check netlify/functions/lib/routes/audit-logs.mjs && node --check netlify/functions/lib/routes/account-activation.mjs && node --check scripts/issue-initial-credential.mjs && node --check public/assets/js/admin-management.js && node --check public/assets/js/activity-logs.js && node --check public/assets/js/activate-account.js && node --check public/assets/js/my-attendance.js && node --check netlify/functions/lib/routes/curriculum.mjs && node --check netlify/functions/lib/routes/assignment-submissions.mjs && node --check public/assets/js/assignments.js && node --check public/assets/js/subjects.js && npm test",
+    "verify:lockfile": "node scripts/verify-lockfile.mjs",
+    "test:emulator": "node scripts/run-emulator-command.mjs firebase emulators:exec --project demo-stem-academy --only auth,firestore \"npm test\"",
+    "emulators": "node scripts/run-emulator-command.mjs firebase emulators:start --project demo-stem-academy --only auth,firestore",
+    "build:client": "node --env-file-if-exists=.env scripts/build-client.mjs",
+    "build:client:emulator": "node scripts/run-emulator-command.mjs node scripts/build-client.mjs --emulator",
+    "seed:emulator": "node scripts/run-emulator-command.mjs node scripts/seed-emulator.mjs",
+    "dev": "npm run build:client:emulator && npx --yes netlify-cli@27.16.3 dev",
+    "issue-initial-credential:emulator": "node scripts/run-emulator-command.mjs node scripts/issue-initial-credential.mjs",
+    "issue-initial-credential": "node scripts/issue-initial-credential.mjs"
   },
   "dependencies": {
-    "firebase-admin": "^13.5.0"
+    "firebase-admin": "^14.5.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.2",
+    "firebase": "10.14.1"
   }
 }

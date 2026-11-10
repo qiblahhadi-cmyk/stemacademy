@@ -1,0 +1,128 @@
+STEM ACADEMY PHASE 7 — PENDING LOCAL / REGISTRY TESTS
+Updated: 10 November 2026
+Project: STEM_Academy_Phase6_Phase5_Corrected
+Verdict: NOT READY FOR PILOT
+
+Status key:
+- BLOCKED: attempted in Session 2 but prerequisites/network prevented completion.
+- SKIPPED: test registered but skipped by its own emulator guard.
+- NOT EXECUTED: requires the owner's Windows/browser or an available local emulator.
+Do not count any of these as passed. Use synthetic data and only project `demo-stem-academy`.
+
+P-01 — Repair package-lock.json (BLOCKED: npm registry DNS)
+Evidence: registry-backed lockfile regeneration failed with EAI_AGAIN resolving registry.npmjs.org. The verifier reports four gaps: root dependency ranges and package entries missing for esbuild@0.24.2 and firebase@10.14.1. Do not hand-edit integrity data.
+Run in PowerShell from project root:
+```powershell
+npm.cmd install --package-lock-only --ignore-scripts --no-audit --no-fund
+node scripts/verify-lockfile.mjs
+```
+Expected: install exit 0; verifier exit 0 and “package-lock.json is consistent with package.json.” Review the lockfile diff.
+
+P-02 — Clean dependency install (BLOCKED: same registry DNS)
+After P-01 succeeds:
+```powershell
+Remove-Item -Recurse -Force node_modules -ErrorAction SilentlyContinue
+npm.cmd ci --no-audit --no-fund
+npm.cmd run verify:lockfile
+```
+Expected: npm ci and verifier exit 0; esbuild and firebase resolve. Do not continue if install fails.
+
+P-03 — Full Firebase Auth/Firestore emulator suite (BLOCKED: Firebase CLI unavailable in sandbox; no emulator listeners)
+Prerequisites: P-02; Node 22.13+; Java 21+; registry access for pinned Firebase CLI. Do not create a root `.env`.
+Terminal 1:
+```powershell
+npm.cmd run emulators
+```
+Terminal 2:
+```powershell
+Test-NetConnection -ComputerName 127.0.0.1 -Port 9099
+Test-NetConnection -ComputerName 127.0.0.1 -Port 8080
+Test-NetConnection -ComputerName 127.0.0.1 -Port 4000
+npm.cmd run test:emulator *> logs\emulator-suite.log
+$exit = $LASTEXITCODE
+"emulator suite exit=$exit"
+Select-String -Path logs\emulator-suite.log -Pattern "^(not ok|# tests |# pass |# fail |# skipped |# cancelled)"
+```
+Expected: Auth 9099 and Firestore 8080 reachable; UI 4000 reachable when enabled; emulator suite exit 0, zero failures and no unexplained emulator skips. Do not run against production.
+
+P-04 — Five production-route membership-revocation race tests (SKIPPED: all five skipped without emulators)
+Prerequisites: P-02 and local Auth/Firestore emulators. “Production-route” means real route handlers; services must be emulator-only.
+```powershell
+node scripts/run-emulator-command.mjs firebase emulators:exec --project demo-stem-academy --only auth,firestore "node --test tests/firebase/production-route-races-emulator.test.mjs" *> logs\route-races.log
+$exit = $LASTEXITCODE
+"race test exit=$exit"
+Select-String -Path logs\route-races.log -Pattern "^(not )?ok|# tests |# pass |# fail |# skipped"
+```
+Expected: five passing tests (attendance mark, attendance correction, assignment create, assignment publish, assessment start); zero skipped, failed or cancelled. Capture final Firestore state assertions. Do not weaken assertions.
+
+P-05 — Emulator client build (BLOCKED: esbuild not installed)
+Prerequisites: P-02.
+```powershell
+npm.cmd run build:client:emulator *> logs\client-build.log
+$exit = $LASTEXITCODE
+"emulator client build exit=$exit"
+Get-ChildItem public\assets\js\bundles
+```
+Expected: exit 0; `login.js` and `session.js` bundles exist and contain only demo emulator config.
+
+P-06 — Firestore rules and indexes (NOT EXECUTED: emulator/CLI unavailable)
+Static JSON parsing passed in Session 2, but does not validate Firestore semantics or index availability.
+```powershell
+node -e "JSON.parse(require('node:fs').readFileSync('firestore.indexes.json','utf8')); JSON.parse(require('node:fs').readFileSync('firebase.json','utf8')); console.log('Firebase config JSON parsed')"
+npm.cmd run test:emulator *> logs\firestore-emulator-validation.log
+$exit = $LASTEXITCODE
+"Firestore emulator validation exit=$exit"
+Select-String -Path logs\firestore-emulator-validation.log -Pattern "index|permission|not ok|# tests |# pass |# fail |# skipped"
+```
+Expected: valid JSON; emulator tests prove unauthenticated browser reads/writes are denied and required ChitChat queries execute without missing-index errors. Record any index warnings. Do not run `firebase deploy`.
+
+P-07A/B/C — Authenticated admin, teacher and student browser walkthrough (NOT EXECUTED: browser/emulator session unavailable)
+Prerequisites: P-02 through P-05. Synthetic accounts only.
+Terminal 1: `npm.cmd run emulators`
+Terminal 2:
+```powershell
+npm.cmd run seed:emulator *> logs\seed.log
+$seedExit = $LASTEXITCODE
+"seed exit=$seedExit"
+npm.cmd run dev
+```
+Open `http://localhost:8888/login.html`. Follow `BROWSER_WALKTHROUGH.md` and section 8 of `LOCAL_MACHINE_VERIFICATION_GUIDE.md`. Verify login/logout, role navigation and scope, account activation, assignments, assessments, attendance, notices, activity logs, ChitChat author edit/reply/history/soft-delete/report/moderation/read isolation/typing/search, and DASH-09 role-scoped unread counts.
+Expected: separate PASS/FAIL results for admin, teacher and student; no unauthorized cross-class data, console errors, 5xx responses or production network calls. Never share generated passwords, cookies, tokens or `.env`.
+
+P-08A/B — Registry-backed dependency security audit (BLOCKED: npm audit endpoint DNS)
+Prerequisites: P-02 and registry access.
+```powershell
+npm.cmd audit *> logs\npm-audit.log
+$auditExit = $LASTEXITCODE
+npm.cmd audit --omit=dev --json > logs\npm-audit-production.json
+$prodAuditExit = $LASTEXITCODE
+"full audit exit=$auditExit; production audit exit=$prodAuditExit"
+Get-Content logs\npm-audit.log -Tail 60
+```
+Expected: registry-backed advisory response for all and production dependencies; record severity, package, dependency path and remediation. Offline audit output is not acceptable evidence.
+
+P-09 — Static security headers and HTTPS review (PARTIAL: static config reviewed; no live HTTPS deployment authorized)
+Static config currently sets X-Content-Type-Options, X-Frame-Options, Referrer-Policy and Permissions-Policy. CSP and HSTS are absent from `netlify.toml`. Do not add an untested restrictive CSP or claim HSTS is active. Review script/style/connect sources before proposing CSP. HSTS requires an authorized HTTPS preview/deployment; no production deploy is authorized.
+After local dev starts:
+```powershell
+curl.exe -I http://localhost:8888/
+```
+Expected: record local headers only; HTTP does not prove HSTS. CSP/HSTS remain unresolved pending policy review and authorized HTTPS evidence.
+
+P-10 — Windows PowerShell/cmd execution (NOT EXECUTED: sandbox is Linux)
+On the owner's Windows 10/11 machine, from project root:
+```powershell
+node -v
+npm.cmd -v
+java -version
+npm.cmd run check
+npm.cmd run verify:lockfile
+npm.cmd run build:client:emulator
+npm.cmd run test:emulator
+```
+Expected: exact versions, command exit codes and output summaries. P-01/P-02 must pass before build/emulator commands. `npm.cmd` is intentional for PowerShell. Record any actual cmd.exe quoting failures; unit coverage alone is not Windows execution.
+
+Historical note:
+- Earlier emulator result: 384 total, 379 passed, 0 failed, 5 cancelled, exit 1. Historical only.
+- Session 2 direct race invocation: 5 registered, 0 passed, 0 failed, 5 skipped, exit 0 because emulator endpoints were absent.
+- Session 2 `npm test` and `npm run check`: 370 total, 354 passed, 0 failed, 16 skipped, 0 cancelled.

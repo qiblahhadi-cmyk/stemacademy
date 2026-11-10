@@ -1,51 +1,109 @@
-const initialActivities = [
-  { id: 1, category: "Assignments", actor: "Physics Teacher", action: "Created an assignment", detail: "Grade 9 · Motion and Force practice", time: "2026-11-08T09:20:00+05:00" },
-  { id: 2, category: "Attendance", actor: "Physics Teacher", action: "Updated classroom attendance", detail: "Grade 10 · Daily register example", time: "2026-11-08T08:55:00+05:00" },
-  { id: 3, category: "Communication", actor: "Academy Admin", action: "Published an academy notice", detail: "Reminder about the weekly class schedule", time: "2026-11-07T15:10:00+05:00" },
-  { id: 4, category: "Assessments", actor: "Physics Teacher", action: "Added an assessment", detail: "Grade 9 · Chapter test example", time: "2026-11-07T12:30:00+05:00" },
-  { id: 5, category: "Classes", actor: "Academy Admin", action: "Updated class information", detail: "Grade 10 Physics · Example class record", time: "2026-11-06T11:45:00+05:00" },
-  { id: 6, category: "Account", actor: "Academy Admin", action: "Reviewed account settings", detail: "Profile and academy preferences preview", time: "2026-11-05T10:00:00+05:00" }
-];
-let activities = [...initialActivities];
-const list = document.getElementById("activityList");
-const search = document.getElementById("activitySearch");
-const category = document.getElementById("categoryFilter");
-const actor = document.getElementById("actorFilter");
-const count = document.getElementById("activityCount");
-const empty = document.getElementById("emptyActivity");
-const summary = document.getElementById("activitySummary");
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const PAGE_SIZE = 25;
+  const formatter = new Intl.DateTimeFormat("en-PK", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Karachi" });
+  const ROLE_LABELS = { admin: "Administrator", teacher: "Teacher", student: "Student" };
+  const METADATA_LABELS = { classId: "Class", subjectId: "Subject", scope: "Audience", attendanceDate: "Attendance date", count: "Records", role: "Role", academyId: "Academy ID", fields: "Fields" };
+  let nextCursor = null;
+  let loading = false;
+  let total = 0;
 
-function formatDate(value) {
-  return new Intl.DateTimeFormat("en-PK", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-}
-function render() {
-  const query = search.value.trim().toLowerCase();
-  const filtered = activities.filter(item => {
-    const matchesText = [item.category, item.actor, item.action, item.detail].join(" ").toLowerCase().includes(query);
-    return matchesText && (category.value === "all" || item.category === category.value) && (actor.value === "all" || item.actor === actor.value);
-  }).sort((a, b) => new Date(b.time) - new Date(a.time));
-  count.textContent = `${filtered.length} activit${filtered.length === 1 ? "y" : "ies"}`;
-  summary.innerHTML = ["Classes", "Assignments", "Assessments", "Attendance", "Communication", "Account"].map(name => {
-    const total = activities.filter(item => item.category === name).length;
-    return `<div class="activity-stat"><strong>${total}</strong><span>${name}</span></div>`;
-  }).join("");
-  list.innerHTML = filtered.map(item => `
-    <article class="activity-entry">
-      <span class="activity-dot" aria-hidden="true"></span>
-      <div class="activity-entry-main">
-        <div class="activity-entry-top"><span class="activity-category">${item.category}</span><time datetime="${item.time}">${formatDate(item.time)}</time></div>
-        <h3>${item.action}</h3><p>${item.detail}</p><span class="activity-actor">${item.actor}</span>
-      </div>
-    </article>`).join("");
-  empty.hidden = filtered.length !== 0;
-}
-[search, category, actor].forEach(control => control.addEventListener("input", render));
-document.getElementById("resetActivity").addEventListener("click", () => {
-  activities = [...initialActivities];
-  search.value = "";
-  category.value = "all";
-  actor.value = "all";
-  render();
-});
-document.getElementById("menuButton")?.addEventListener("click", () => document.getElementById("sidebar")?.classList.toggle("open"));
-render();
+  function currentQuery(cursor) {
+    const params = new URLSearchParams({ limit: String(PAGE_SIZE) });
+    const map = { q: "activitySearch", category: "categoryFilter", actorRole: "roleFilter", from: "fromDate", to: "toDate" };
+    for (const [key, id] of Object.entries(map)) {
+      const value = $(id).value.trim();
+      if (value) params.set(key, value);
+    }
+    if (cursor) params.set("cursor", cursor);
+    return params.toString();
+  }
+
+  function formatTime(iso) {
+    const date = iso ? new Date(iso) : null;
+    return date && !Number.isNaN(date.getTime()) ? formatter.format(date) : "Time unavailable";
+  }
+
+  function detailText(record) {
+    const parts = [];
+    for (const [key, value] of Object.entries(record.metadata || {})) {
+      const label = METADATA_LABELS[key] || key;
+      parts.push(`${label}: ${Array.isArray(value) ? value.join(", ") : value}`);
+    }
+    return parts.join(" · ");
+  }
+
+  // Built with textContent only: audit values are never interpreted as HTML.
+  function entryElement(record) {
+    const article = document.createElement("article");
+    article.className = "activity-entry";
+    const dot = document.createElement("span");
+    dot.className = "activity-dot";
+    dot.setAttribute("aria-hidden", "true");
+    const main = document.createElement("div");
+    main.className = "activity-entry-main";
+    const top = document.createElement("div");
+    top.className = "activity-entry-top";
+    const category = document.createElement("span");
+    category.className = "activity-category";
+    category.textContent = record.category;
+    const time = document.createElement("time");
+    if (record.createdAt) time.dateTime = record.createdAt;
+    time.textContent = formatTime(record.createdAt);
+    top.append(category, time);
+    const title = document.createElement("h3");
+    title.textContent = record.description;
+    const detail = document.createElement("p");
+    detail.textContent = detailText(record) || (record.targetId ? `Record: ${record.targetId}` : "");
+    detail.hidden = !detail.textContent;
+    const actor = document.createElement("span");
+    actor.className = "activity-actor";
+    const role = ROLE_LABELS[record.actorRole] || "Unknown role";
+    actor.textContent = record.actorAcademyId ? `${role} · ${record.actorAcademyId}` : role;
+    main.append(top, title, detail, actor);
+    article.append(dot, main);
+    return article;
+  }
+
+  function showError(message) {
+    const box = $("activityError");
+    box.textContent = message || "";
+    box.hidden = !message;
+  }
+
+  function updateCount() {
+    $("activityCount").textContent = `${total} entr${total === 1 ? "y" : "ies"} shown`;
+  }
+
+  async function load(reset) {
+    if (loading) return;
+    loading = true;
+    showError("");
+    $("loadMore").disabled = true;
+    if (reset) { nextCursor = null; total = 0; $("activityList").replaceChildren(); }
+    try {
+      const result = await window.StemSession.apiFetch(`/admin/audit-logs?${currentQuery(reset ? null : nextCursor)}`);
+      const { records, nextCursor: cursor, hasMore, scanLimited } = result.data;
+      $("activityList").append(...records.map(entryElement));
+      total += records.length;
+      nextCursor = hasMore ? cursor : null;
+      $("loadMore").hidden = !hasMore;
+      $("scanNote").hidden = !scanLimited;
+      $("emptyActivity").hidden = total !== 0 || hasMore;
+      updateCount();
+    } catch (error) {
+      showError(error?.message || "Activity could not be loaded. Please try again.");
+      $("activityCount").textContent = "Unavailable";
+    } finally {
+      loading = false;
+      $("loadMore").disabled = false;
+    }
+  }
+
+  $("activityFilters").addEventListener("submit", (event) => { event.preventDefault(); load(true); });
+  $("clearFilters").addEventListener("click", () => { $("activityFilters").reset(); load(true); });
+  $("loadMore").addEventListener("click", () => load(false));
+  $("menuButton")?.addEventListener("click", () => $("sidebar")?.classList.toggle("open"));
+  load(true);
+})();

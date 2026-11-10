@@ -14,43 +14,50 @@
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="/"><span class="brand-mark">S</span><span><strong>STEM Academy</strong><small>AJK Board Physics</small></span></a>
       <nav class="nav-list" aria-label="Main navigation">
-        <a href="/#dashboard" data-page="dashboard">Dashboard</a>
+        <a href="/" data-page="dashboard">Dashboard</a>
         <a href="/classes.html" data-page="classes">Classes &amp; People</a>
         <a href="/subjects.html" data-page="subjects">Subjects &amp; Topics</a>
         <a href="/assignments.html" data-page="assignments">Assignments</a>
         <a href="/assessments.html" data-page="assessments">Assessments &amp; Results</a>
-        <a href="/course-hub.html" data-page="course-hub">Course Hub</a>
+
         <a href="/attendance.html" data-page="attendance">Attendance</a>
-        <a href="/communication.html" data-page="communication">Communication</a>
-        <a class="active" href="/activity-logs.html" data-page="activity">Activity Logs</a>
-        <a href="/#profile" data-page="profile">My Account &amp; Profile</a>
-        <a href="/#settings" data-page="settings">Admin &amp; Settings</a>
+        <a href="/communication.html" data-page="communication">Notices</a>
+        <a href="/chitchat.html" data-page="chitchat">ChitChat</a>
+        <a href="/profile.html" data-page="profile">My Account &amp; Profile</a>
+        <a href="/settings.html" data-page="settings">Admin &amp; Settings</a>
       </nav>
-      <div class="sidebar-foot">Development preview · Demo records only</div>
+      <button class="nav-link" type="button" data-sign-out><span>⎋</span> Sign out</button>
     </aside>
     <main class="main-area">
-      <header class="topbar"><button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button><span id="currentSection">Activity Logs</span><span class="preview-tag">PREVIEW</span></header>
+      <header class="topbar"><button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button><span id="currentSection">Activity Logs</span><span class="preview-tag">ADMINISTRATOR ONLY</span></header>
       <section class="module-page activity-page">
         <div class="welcome-row">
-          <div><p class="eyebrow">ACADEMY OVERSIGHT</p><h1>Activity Logs</h1><p class="muted">A chronological view of important actions across the academy.</p></div>
-          <span class="module-count" id="activityCount">0 activities</span>
+          <div><p class="eyebrow">ACADEMY OVERSIGHT</p><h1>Activity Logs</h1><p class="muted">A read-only record of important actions taken in the academy system.</p></div>
+          <span class="module-count" id="activityCount" role="status">Loading…</span>
         </div>
-        <div class="notice" role="note"><span class="notice-icon">i</span><p><strong>Demo only:</strong> These fictional examples are stored in this browser page's memory. No real user activity is being recorded, and this is not an audit log.</p></div>
-        <div class="module-toolbar">
-          <label class="search-field"> <span class="sr-only">Search activity</span><input id="activitySearch" type="search" placeholder="Search activities..." autocomplete="off"></label>
-          <label class="filter-field"><span class="sr-only">Filter by category</span><select id="categoryFilter"><option value="all">All categories</option><option value="Classes">Classes</option><option value="Assignments">Assignments</option><option value="Assessments">Assessments</option><option value="Attendance">Attendance</option><option value="Communication">Communication</option><option value="Account">Account</option></select></label>
-          <label class="filter-field"><span class="sr-only">Filter by actor</span><select id="actorFilter"><option value="all">All people</option><option value="Academy Admin">Academy Admin</option><option value="Physics Teacher">Physics Teacher</option></select></label>
-        </div>
-        <div class="activity-summary" id="activitySummary" aria-live="polite"></div>
+        <div class="notice" role="note"><span class="notice-icon">i</span><p><strong>Audit trail.</strong> Entries come from the server's audit log and cannot be edited or deleted here. Names, passwords and result details are never shown; people appear by role and academy ID.</p></div>
+        <form class="module-toolbar" id="activityFilters" autocomplete="off">
+          <label class="search-field"><span class="sr-only">Search activity</span><input id="activitySearch" type="search" maxlength="100" placeholder="Search action, class, subject or record ID"></label>
+          <label class="filter-field"><span class="sr-only">Filter by category</span><select id="categoryFilter"><option value="">All categories</option><option>Classes</option><option>Assignments</option><option>Assessments</option><option>Attendance</option><option>Communication</option><option>Account</option><option>Other</option></select></label>
+          <label class="filter-field"><span class="sr-only">Filter by role</span><select id="roleFilter"><option value="">All roles</option><option value="admin">Administrator</option><option value="teacher">Teacher</option><option value="student">Student</option></select></label>
+          <label class="filter-field"><span class="sr-only">From date</span><input id="fromDate" type="date" aria-label="From date"></label>
+          <label class="filter-field"><span class="sr-only">To date</span><input id="toDate" type="date" aria-label="To date"></label>
+          <button class="button button-primary" type="submit">Apply</button>
+          <button class="button button-secondary" id="clearFilters" type="button">Clear</button>
+        </form>
+        <p class="form-feedback" id="activityError" role="alert" hidden></p>
         <section class="panel activity-panel">
-          <div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Newest examples appear first.</p></div><button class="button button-secondary" id="resetActivity" type="button">Reset demo data</button></div>
+          <div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Newest entries appear first. Times are shown in Pakistan Standard Time.</p></div></div>
           <div id="activityList" class="activity-list" aria-live="polite"></div>
-          <p id="emptyActivity" class="empty-state" hidden>No activities match your filters.</p>
+          <p id="emptyActivity" class="empty-state" hidden>No recorded activity matches these filters.</p>
+          <p id="scanNote" class="muted" hidden>Some older entries were skipped to keep this search fast. Load more to keep searching.</p>
+          <div class="panel-heading"><button class="button button-secondary" id="loadMore" type="button" hidden>Load more</button></div>
         </section>
-        <footer>STEM Academy <span>•</span> AJK Board Physics <span>•</span> Development preview</footer>
+        <footer>STEM Academy <span>•</span> AJK Board Physics <span>•</span> Administrator oversight</footer>
       </section>
     </main>
   </div>
-  <script type="module" src="/assets/js/activity-logs.js"></script>
+  <script src="/assets/js/bundles/session.js" defer></script>
+  <script src="/assets/js/activity-logs.js" defer></script>
 </body>
 </html>

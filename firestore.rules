@@ -1,75 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Helper function to check authentication state
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    // Helper function to retrieve user document data
-    function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
-    }
-
-    // Helper function to verify specific role
-    function hasRole(role) {
-      return isAuthenticated() && getUserData().role == role;
-    }
-
-    // Helper function to verify admin or teacher status
-    function isAdminOrTeacher() {
-      return isAuthenticated() && (getUserData().role == 'admin' || getUserData().role == 'teacher');
-    }
-
-    // Users Collection Rules
-    match /users/{userId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated() && (request.auth.uid == userId || hasRole('admin'));
-      allow delete: if hasRole('admin');
-    }
-
-    // Classes & Academics Collection Rules
-    match /classes/{classId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdminOrTeacher();
-    }
-
-    // Assignments Collection Rules
-    match /assignments/{assignmentId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdminOrTeacher();
-    }
-
-    // Attendance Collection Rules
-    match /attendance/{attendanceId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdminOrTeacher();
-    }
-
-    // Assessments Collection Rules
-    match /assessments/{assessmentId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdminOrTeacher();
-    }
-
-    // Communications & Notices Collection Rules
-    match /communications/{communicationId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdminOrTeacher();
-    }
-
-    // Counters Collection (ID Allocator) Rules
-    match /_counters/{counterId} {
-      allow read, write: if isAuthenticated();
-    }
-
-    // Audit Logs Collection Rules
-    match /auditLogs/{logId} {
-      allow read: if hasRole('admin');
-      allow create: if isAuthenticated();
-      allow update, delete: if false;
+    // Browser/client SDK access is intentionally disabled. All application
+    // data access must go through the authenticated Netlify API using Admin SDK.
+    // Admin SDK requests bypass these rules and are protected by API checks.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -15,6 +15,11 @@ export const API_ERRORS = {
     message: "Account access is disabled."
   },
 
+  PASSWORD_CHANGE_REQUIRED: {
+    status: 403,
+    message: "Change your initial password before continuing."
+  },
+
   INVALID_ROLE: {
     status: 403,
     message: "Account permissions are invalid."
@@ -33,5 +38,15 @@ export const API_ERRORS = {
   METHOD_NOT_ALLOWED: {
     status: 405,
     message: "Method not allowed."
+  },
+
+  INVALID_INPUT: {
+    status: 400,
+    message: "The request is invalid."
+  },
+
+  CONFLICT: {
+    status: 409,
+    message: "The requested change conflicts with the current record state."
   }
 };

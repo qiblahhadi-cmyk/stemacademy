@@ -1,31 +1,32 @@
-import { describe, it } from 'node:test';
-import assert from 'node:assert';
-import { handler } from '../../netlify/functions/api.mjs';
+import test from "node:test";
+import assert from "node:assert/strict";
+import { handler } from "../../netlify/functions/api.mjs";
 
-describe('Serverless API Health & Routing Smoke Tests', () => {
-  it('handles CORS OPTIONS preflight requests correctly', async () => {
-    const event = {
-      httpMethod: 'OPTIONS',
-      path: '/api/v1/classes',
-      headers: {}
-    };
+test("health endpoint returns a no-cache JSON success response", async () => {
+  const response = await handler(new Request("https://example.test/api/health"));
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type"), /application\/json/);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  const body = await response.json();
+  assert.equal(body.success, true);
+  assert.equal(body.application, "STEM Academy");
+});
 
-    const response = await handler(event, {});
-    assert.strictEqual(response.statusCode, 204);
-    assert.ok(response.headers['Access-Control-Allow-Origin']);
-  });
+test("unknown API routes return a structured 404 response", async () => {
+  const response = await handler(new Request("https://example.test/api/v1/not-a-route"));
+  assert.equal(response.status, 404);
+  const body = await response.json();
+  assert.equal(body.error.code, "NOT_FOUND");
+});
 
-  it('returns 404 for unknown API routes', async () => {
-    const event = {
-      httpMethod: 'GET',
-      path: '/api/v1/nonexistent',
-      headers: {}
-    };
+test("health endpoint is method-specific", async () => {
+  const response = await handler(new Request("https://example.test/api/health", { method: "POST" }));
+  assert.equal(response.status, 404);
+});
 
-    const response = await handler(event, {});
-    assert.strictEqual(response.statusCode, 404);
-    const body = JSON.parse(response.body);
-    assert.strictEqual(body.success, false);
-    assert.strictEqual(body.error.code, 'NOT_FOUND');
-  });
+test("protected session endpoint rejects unsupported methods without Firebase", async () => {
+  const response = await handler(new Request("https://example.test/api/me", { method: "POST" }));
+  assert.equal(response.status, 405);
+  const body = await response.json();
+  assert.equal(body.error.code, "METHOD_NOT_ALLOWED");
 });

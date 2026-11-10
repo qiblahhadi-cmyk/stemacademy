@@ -1,33 +1,20 @@
-import { describe, it } from 'node:test';
-import assert from 'node:assert';
-import { requirePermission, requireRole } from '../../netlify/functions/lib/authorization.mjs';
-import { ForbiddenError } from '../../netlify/functions/lib/errors.mjs';
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  requireRole,
+  requireStudentOwner
+} from "../../netlify/functions/lib/authorization.mjs";
 
-describe('API Authorization & RBAC Middleware Tests', () => {
-  it('permits access when user has direct permission', () => {
-    const user = { role: 'teacher', email: 'teacher@stem.academy' };
-    const check = requirePermission('academics:write');
-    assert.doesNotThrow(() => check(user));
-  });
+test("requireRole allows only explicitly listed roles", () => {
+  const teacher = { uid: "teacher-1", role: "teacher" };
+  assert.equal(requireRole(teacher, ["admin", "teacher"]), teacher);
+  assert.throws(() => requireRole({ uid: "student-1", role: "student" }, ["admin", "teacher"]), /FORBIDDEN/);
+  assert.throws(() => requireRole(null, ["admin"]), /FORBIDDEN/);
+});
 
-  it('throws ForbiddenError when user lacks permission', () => {
-    const user = { role: 'student', email: 'student@stem.academy' };
-    const check = requirePermission('users:delete');
-    assert.throws(() => check(user), ForbiddenError);
-  });
-
-  it('allows wildcard admin role for all protected permissions', () => {
-    const user = { role: 'admin', email: 'admin@stem.academy' };
-    const check = requirePermission('users:delete');
-    assert.doesNotThrow(() => check(user));
-  });
-
-  it('enforces allowed roles check correctly', () => {
-    const user = { role: 'student', email: 'student@stem.academy' };
-    const checkRole = requireRole(['admin', 'teacher']);
-    assert.throws(() => checkRole(user), ForbiddenError);
-
-    const teacherUser = { role: 'teacher', email: 'teacher@stem.academy' };
-    assert.doesNotThrow(() => checkRole(teacherUser));
-  });
+test("students can only act on their own student records", () => {
+  const student = { uid: "student-1", role: "student" };
+  assert.equal(requireStudentOwner(student, "student-1"), student);
+  assert.throws(() => requireStudentOwner(student, "student-2"), /FORBIDDEN/);
+  assert.throws(() => requireStudentOwner({ uid: "admin-1", role: "admin" }, "student-1"), /FORBIDDEN/);
 });

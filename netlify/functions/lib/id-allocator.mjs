@@ -1,5 +1,3 @@
-import { FieldValue } from "firebase-admin/firestore";
-
 const COUNTER_COLLECTION = "systemCounters";
 const ACADEMY_TIME_ZONE = "Asia/Karachi";
 
@@ -15,6 +13,7 @@ function academyYear(date) {
 }
 
 async function allocateNextNumber(db, counterId) {
+  const { FieldValue } = await import("firebase-admin/firestore");
   if (!db || typeof db.runTransaction !== "function") {
     throw new TypeError("A valid Firestore database connection is required.");
   }

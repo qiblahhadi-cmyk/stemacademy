@@ -98,3 +98,21 @@
 @media (max-width: 900px) { .settings-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) { .settings-layout { grid-template-columns: 1fr; } .settings-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); } .settings-tab { font-size: .82rem; padding: 10px 8px; } .settings-panel { padding: 16px; } }
 @media (max-width: 420px) { .settings-overview { grid-template-columns: 1fr 1fr; } .system-status-list > div { align-items: flex-start; flex-direction: column; gap: 5px; } .system-status-list > div strong { text-align: left; } }
+
+/* Small status label, e.g. "Coming soon" on pages not yet in the pilot. */
+.badge{display:inline-block;background:#fef3c7;color:#92400e;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:650;margin-right:6px;vertical-align:middle}
+.admin-workspace{margin-top:18px}.admin-create-form{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}.admin-create-form h3{font-size:14px;margin:0 0 5px}.admin-create-form #formFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.admin-create-form #formFields label{display:flex;flex-direction:column;gap:5px}.admin-create-form #formFields label span{font-size:10px;font-weight:650;color:#374151}.admin-create-form #formFields input,.admin-create-form #formFields select{height:38px;border:1px solid var(--border);border-radius:7px;padding:0 9px;font:inherit;font-size:12px;min-width:0}.admin-row-actions{display:flex;gap:8px}.admin-row-actions button{border:1px solid var(--border);border-radius:6px;background:#fff;padding:5px 8px;font:inherit;font-size:10px;cursor:pointer}.admin-row-actions button[data-deactivate]{color:#b91c1c}@media(max-width:700px){.admin-create-form #formFields{grid-template-columns:1fr}.admin-workspace .settings-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Dashboard grid is hidden until figures load; its grid display must not override that. */
+.stats-grid[hidden] { display: none; }
+.activity-page .module-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0 0; }
+.activity-page .module-toolbar .search-field { flex: 1 1 260px; max-width: 340px; }
+.activity-page .module-toolbar select, .activity-page .module-toolbar input[type="date"] { height: 35px; border: 1px solid var(--border); border-radius: 7px; background: #fff; padding: 0 10px; font: inherit; font-size: 11px; color: var(--text); }
+.activity-page .button { border: 1px solid #d1d5db; border-radius: 7px; background: #fff; color: #374151; padding: 9px 13px; font: inherit; font-size: 11px; font-weight: 650; cursor: pointer; }
+.activity-page .button-primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+.activity-page .button:disabled { opacity: .6; cursor: progress; }
+.activity-page .empty-state, .activity-page #scanNote { text-align: center; color: var(--muted); font-size: 11px; padding: 18px 0; }
+.activity-page .form-feedback:not([hidden]) { margin-top: 12px; }
+@media (max-width: 680px) { .activity-page .module-toolbar .search-field { flex-basis: 100%; max-width: none; } }
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.submission-workspace{display:grid;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}.submission-workspace h3{font-size:13px;margin:0}.submission-card{display:grid;gap:9px;padding:13px;border:1px solid var(--border);border-radius:8px}.submission-card .detail-field p{white-space:pre-wrap;overflow-wrap:anywhere}.submission-workspace .field-label{display:grid;gap:6px}.submission-workspace textarea,.submission-workspace input{width:100%}.submission-card .detail-field{margin:0}
